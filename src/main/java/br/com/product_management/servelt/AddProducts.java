@@ -29,7 +29,7 @@ public class AddProducts extends HttpServlet {
 	/**
 	 * Add a product using Post method and CSV file in form data 
 	 * Columns Template:
-	 * NAME,VALUE,BRAND,SIZE,QUANTITY
+	 * NAME,VALUE,BRAND,SIZE,QUANTITY,CATEGORIES
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String csvInputString = FormDataService.csvReader(request);
@@ -41,7 +41,7 @@ public class AddProducts extends HttpServlet {
 		
 		String[] csvLines = csvInputString.split("\n");
 		for (int i = 1; i < csvLines.length; i++) {
-			String[] objectLine = csvLines[i].split(",");;
+			String[] objectLine = csvLines[i].split(",");
 			String name = null;
 			double value = 0;
 			String brand = null;
@@ -58,6 +58,12 @@ public class AddProducts extends HttpServlet {
 		        return;
 			}
 			Product product = new Product(name, value, brand, size);
+			if(objectLine.length == 6) {
+				String[] categories = objectLine[5].split("-");
+				for(int j=0; j < categories.length; j++) {
+					product.addCategory(categories[j]);
+				}
+			}
 			Werehouse werehouse = new Werehouse();
 			werehouse.addProduct(product, quantity);
 		}
@@ -69,7 +75,4 @@ public class AddProducts extends HttpServlet {
         out.print(csvInputString);
         out.flush();
 	}
-
-
-
 }
