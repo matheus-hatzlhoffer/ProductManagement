@@ -27,9 +27,9 @@ public class GetProduct extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String uri = request.getRequestURI();
+		String uri = request.getRequestURI().trim();
 		
-		if(URIService.checkURILength(uri) != 3) {
+		if(URIService.checkURILength(uri) != 4) {
 			ErrorService.addErrorResponse("Error: Invalid URL", response);
 	        return;
 		}
